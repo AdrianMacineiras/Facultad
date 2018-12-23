@@ -1,0 +1,12 @@
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/restservice/servlets/ReservasServlet.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/serviceutil/EspectaculoToEspectaculoEntradaDtoConversor.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/serviceutil/EspectaculoToEspectaculoSalidaDtoConversor.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/dto/ServiceReservaDto.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/restservice/xml/XmlServiceReservaDtoConversor.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/serviceutil/ReservaToReservaDtoConversor.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/restservice/xml/XmlServiceEspectaculoEntradaDtoConversor.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/restservice/servlets/EspectaculosServlet.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/dto/ServiceEspectaculoEntradaDto.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/restservice/xml/XmlServiceExceptionConversor.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/dto/ServiceEspectaculoSalidaDto.java
+/home/adrian/Desktop/ISD/isd/isd015/ws-app-service/src/main/java/es/udc/ws/app/restservice/xml/XmlServiceEspectaculoSalidaDtoConversor.java
