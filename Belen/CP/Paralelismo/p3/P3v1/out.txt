@@ -1,0 +1,11 @@
+max 1
+max 5
+min 4
+max 9
+min 6
+max 3
+min 2
+min 0
+--------------------------------------------------------------------------
+mpirun noticed that process rank 2 with PID 3406 on node Belen-Ubuntu exited on signal 11 (Segmentation fault).
+--------------------------------------------------------------------------
