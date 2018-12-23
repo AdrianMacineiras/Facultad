@@ -1,0 +1,140 @@
+1) editar ssh_known_hosts
+   ssh -v lsi@10.10.102.102 -> saber mas o menos que es cada cosa
+   etc/ssh
+	ssh-keyscan 10.10.102.109 >> /etc/ssh/ssh_known_hosts
+
+   -> desde lsi: ssh-keygen -t rsa
+    			te crea -> id_rsa,id_rsa.pub
+	frase de paso en blanco.
+
+	-> mi COMPAÑERO guarda en un fichero su clave publica y con el comando scp -C /home/lsi/.ssh/id_rsa.pub lsi@10.10.102.150:/home/lsi/.ssh/clave la guarda en mi terminal
+	-> depues hice un cat clave>>authorized_keys
+	-> service sshd restart
+	-> ya se puede conectar a mio
+
+
+	-> YO
+	->  scp -C /home/lsi/.ssh/id_rsa.pub lsi@10.10.102.154:/home/lsi/.ssh/clave
+	-> hace el cat clave>>authorized_keys
+	-> service sshd restart
+	-> ya me puedo conectar -> desde lsi-> ssh lsi@10.10.102.154
+
+como se conecta?¿?¿
+
+ssh -P -L 10080:10.10.102.109:80 lsi@10.10.102.109
+
+
+
+*********************
+*     APACHE	    *
+*********************
+#apt-get install openssl 
+1º) Primero, cree los directorios donde mantener los certificados de la AC y los archivos relacionados:
+mkdir /etc/ssl/CA
+mkdir /etc/ssl/newcerts
+
+2º) La CA necesita unos cuantos archivos más para funcionar: uno para llevar la cuenta del último número de serie usado por la CA (cada certificado tiene un número de serie único), y otro archivo para registrar los certificados que ya han sido emitidos:
+
+echo '01' > /etc/ssl/CA/serial
+touch /etc/ssl/CA/index.txt
+
+
+3º)El tercer archivo es un archivo de configuración de AC. Aunque no es estrictamente necesario, es muy conveniente cuando se emiten varios certificados. Edite /etc/ssl/openssl.cnf y cambie lo siguiente en [ CA_default ]:
+
+dir             = /etc/ssl/             # Donde se mantendrá todo
+database        = $dir/CA/index.txt     # archivo índice de base de datos.
+certificate     = $dir/certs/cacert.pem # El certificado de AC
+serial          = $dir/CA/serial        # El número de serie actual
+private_key     = $dir/private/cakey.pem# La clave privada
+
+4º)A continuación, cree el certificado raíz autofirmado :
+
+openssl req -new -x509 -extensions v3_ca -keyout cakey.pem -out cacert.pem -days 365 -config ../ssl/openssl.cnf
+req   →   X.509 Certificate Signing Request (CSR) Management.
+Generating a 1024 bit RSA private key
+............++++++
+............++++++
+writing new private key to 'cakey.pem'
+
+5º)Ahora instale el certificado raíz y la clave:
+
+sudo mv cakey.pem /etc/ssl/private/
+sudo mv cacert.pem /etc/ssl/certs/
+
+6º)  Lo primero que necesita es una solicitud de firma de certificado (Certificate Signing Request, CSR).
+
+Para generar las llaves para la Solicitud de Firma de Certificado (CSR, Certificate Signing Request) ejecute el siguiente comando desde una terminal:
+openssl genrsa -out server.key 2048
+  -des3 → obliga a frase de paso de 4 digitos minimo
+para generar el CSR.
+openssl req -new -key server.key -out server.csr
+
+Ahora todo está preparado para empezar a firmar certificados . Una vez que disponga de un CSR, introduzca lo siguiente para generar un certificado firmado por la CA:
+
+sudo openssl ca -in server.csr -config /etc/ssl/openssl.cnf
+Signature ok
+
+************************************************************
+* todo lo de arriba se resume en los 3 siguientes comandos *
+************************************************************
+/usr/lib/ssl/misc/					   *
+./CA.pl -newca						   *
+./CA.pl -newreq	-node					   *
+./CA.pl -sign						   *
+************************************************************
+
+Configurar apache de quien no es AC
+a2emod ssl ->carga modulo de ssl
+/etc/apache2/ports.conf
+Listen 80
+Listen 443 
+
+
+
+cd etc apache2 sites-available
+antes de la linea </VirtualHost>
+
+<Directory "/var/www/webssl">
+	Options FollowSymLink
+	AllowOverride None
+	Order deny.allow
+	Deny from all
+</Directory>
+
+ServerName web
+DocumentRoot /var/www
+sslengine no
+SSLCertificateFile    /etc/ssl/newcerts/03.pem
+SSLCertificateKeyFile /etc/ssl/claveprivadaapache2.key
+
+
+
+
+
+
+
+
+
+
+
+
+
+ssh -P -L 10080:10.10.102.109:80 lsi@10.10.102.109
+
+EXAMEN
+1)	SSH KNOWN HOST AMBAS MAQUINAS
+	BORRAR $HOME SSH KNOWNHOSTS
+	DESPUES CONECTARSE -> DEBERIA FUNCIONAR (QUE ES, COMO FUNCIONA, PARA QUE ES)
+
+2)	AUTENTICACION CLAVE PUBLICA
+	SSH CON COMPAÑERO Y QUE NO PDA PASSWORD (POR QUE NO PIDE PASSWORD)
+
+3)	ALOMEJOR(TUNEL)
+
+4)	AUTORIDAD CERTIFICADORA (SITE SSL QUE HEMOS HECHO)
+	DWESDE UN NAVEGADOR CONECTARSE A SERVIDOR WEB SIN QUE DE ERROR.
+
+5)	ABRIR SCRIPT DE FIREWALL (PREGUNTAS A SACO)
+	EJECUTAR SCRIPT -> MAQUINA VIVA
+
+

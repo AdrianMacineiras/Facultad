@@ -1,0 +1,165 @@
+b)1- ettercap -T -q -w apartadoB -i eth0 -M arp:remote /  10.10.102.109// /10.10.102.5//
+
+2- Compañero navega con LYNX
+3- scp lsi@10.10.102.102:/home/lsi/apartadoB rutalocal
+4- abrir con wireshark
+
+file export objects http
+
+en paquete follow tcp stream
+
+static herarchy protocol
+
+static conversations
+
+static endpoints
+
+c) nmap -sP -n 10.10.102.0/24
+   nast -m
+
+d) -ettercap -C
+   -enable ipv6
+   -scan host
+   -host list
+
+e)igual que 
+
+f) 1- ettercap -C
+   2- scan hosts
+   3- .5 -> 2
+      .109 ->109
+   4-follow http stream
+
+g) parasite6 -l eth0
+wireshark eth0 ipv6 -> capturar
+
+h) ettercap -c
+   scan host
+   host list
+   target 1 -> compañero
+   target 2 -> router
+   mitm -> arp spoofing -> oneway
+   start
+
+j) apt-get install arpwatch
+  /etc/arpwatch.conf
+	-> eth0 -m lsi@localhost
+  /etc/init.d/arpwatch start (ponemos a funcionar)
+
+
+  nano /etc/arpwatch.conf  
+      eth0 -a -n 10.10.102.0/24 -m lsi
+ /etc/init.d/ -> ./arpwatch start
+	-> tail /var/log/syslog |grep arpwatch
+	-> mirar email -> cat /var/mail/lsi
+
+
+k)  
+ 1. Host Discovery 
+ nmap -sL 10.10.102.0/24 (-sn deshabilita el escaneo de puertos)
+
+ 2. Osfingerprinting
+ nmap -O 10.10.102.109 → Osfingerprinting compañero
+ nmap -O 10.10.102.5 → Osfingerprinting router
+ nmap -O 10.10.102.27 → Osfingerprinting dns
+
+
+
+ 3. Fingerprinting servicios
+nmap -sV 10.10.102.109 → Portscaning compañero
+nmap -sV 10.10.102.5 → Portscaning router
+nmap -sV 10.10.102.27 → Portscaning dns
+
+l) 
+IPV6
+nmap -6 -p 22,80,443 -sT -n fe80::250:56ff:fe91:4dc5%eth0
+
+IPV4
+nmap -p 22,80,443 10.10.102.102
+
+Pero solo salen los puertos que soportan ipv6
+
+m)- iftop -i eth0
+vnstat -l –u –i eth0
+
+
+	NOTA: rx = recibidos
+	      tx = transmitidos
+	      avg rate = tasa promedio
+	      
+        NOTA: top nos da el uso de la memoria,disco,cpu....
+
+Accoungin
+/etc/init.d/acct start
+“ac” Displays total statistics of connect time in hours based on the user logins/logouts from the current wtmp file
+“ac -d” will prints out the total login time in hours by day-wise
+“ac -p” will print the total login time of each user in hours
+“ac lsi” will prints the day-wise total login time of user lsi in hours
+“sa” command is used to print the summary of commands that were executed by users
+
+p) instalar apache2
+
+Getting started: perldoc slowloris.pl or perldoc slowloris6.pl
+chmod 777 slowloris.pl
+chmod 777 slowloris6.pl
+ perl -MCPAN -e 'install IO::Socket::INET'
+ perl -MCPAN -e 'install IO::Socket::SSL'
+ apt-get install libio-socket-ssl-perl
+Service apache2 status
+perl slowloris.pl –dns 10.10.102.109 -> ataque
+netstat –tpan -> ver que pasa
+lynx -> http://localhost -> si no va es bien si va es mal
+
+s)-> LOGCHECK
+	1. instalo logcheck
+	2. en etc/logcheck/logcheck.con
+		-> sendmail to = "lsi"
+	3. recuperamos exim4
+		-> cd /etc/init.d
+		-> insserv exim4
+		-> ./exim4 start
+	
+	4. en cd /etc/logcheck/logfile
+		-> añado -> /var/log/10.10.102.109 (lo que voy a precesar)
+	5. desde cd/usr/sbin
+		->sudo -u logcheck ./logcheck (genera informes que envia por correo a lsi)
+
+	6. mi compañero intentara robarme la contraseña
+	7. miro en cd /var/mail/lsi y te aparece el logcheck
+	
+
+ para atacar yo ->
+	1. creo el diccionario e instalo medusa
+	2. desde /home/lsi/Escritorio ->
+		medusa -h 10.10.102.109 -u lsi -P diccionario.txt -M ssh -f
+
+u)
+OSSEC ->wget https://github.com/ossec/ossec-hids/archive/2.9.1.tar.gz
+tar -xzvf ossec-hids-*.tar.gz
+cd ossec-hids.*
+./install.sh
+
+es		idioma
+local		tipo install
+/var/ossec	donde install
+s		recibir notif
+lsi@localhost	direccion
+localhost	servidor email
+s		servidor integridad
+s		deteccion rootkits
+s		respuesta activa
+s		desechar en el firewall
+
+
+systemctl start ossec.service
+
+
+
+apt-get install php5 apach2 php5-cgi
+		libapache2-mod-php5
+wget https://github.com/ossec/ossec-wui
+tar
+mv ossec-wui-0.3 /var/www/ossec-wui
+cd /var/www/ossex-wui
+./setup.sh
+username: lsi

@@ -1,0 +1,78 @@
+
+
+ettercap opciones target1 target2
+
+si maquina no tiene ipv6 "//" si la tiene "///" en target1 y target2
+
+targets en la forma macs/ips/puertos
+
+//80 -> toda MAC y toda IP en el puerto 80
+
+MAC en formato xx:xx:..xx
+
+/10.10.102.109// /10.10.102.5//
+
+salir de ettercap "q"
+
+ettercap -T -M arp -V [hex, ascii] /ip/ /ip/ (si ipv6 /ip// /ip//)
+trafico entre dos ips un arp spoofing a pantallaen texto en ascii o hexadecimal
+
+ettercap -TQ -P repoison_arp -M arp:remote /10.10.102.50/ /10.10.102.5/ arp:remote
+permite trafico enteun host y el router, capturando el trafico que viene de internet -p [plugins] ejecuta ese plugin, en este caso_arp
+
+
+whireshark desde portatil -> ssh -X lsi@10.10.102.102
+			     gksu whireshark
+
+lynx -> navegador desde terminal
+
+c)ping direccion broadcast de red
+nmap -sP -n 10.10.102/24
+arp -a // nast -m -i eth0
+
+
+d) apt-get install libcap0.8-dev
+		   libssl.dev
+alive6 eth0
+alive6 eth1
+alive tun6to4 -> calcular apartir de ipv4
+ping6 -c 3 -I eth0 ff02::1
+ping6 -c 6 ff02::1%eth0
+
+e)whireshark
+
+f)ettercap -Tq -M arp:remote -P remote_browser /ip compañero/ /10.10.102.4,5/
+
+
+g) ettercap -Tq -w fichero -M ndp:oneway //fe80:xxxxx/ //fe80:XXXXX/
+
+i)apt-get install build-essential ruby-dev libcap-dev
+
+j)apt-get install arpon
+descomentar para static y sustituir no por yes
+daemon_opts='-q -f /var/log/arpon/arpon.log -g
+
+k)nmap -sS -pl-100 -n 10.10.102.109
+nmap -sU 123, 514 -n 10.10.102.0/24
+
+m) install iftop
+install vstat
+
+
+p) apt-get install apache2
+wget https://github.com/shekyan/slowhttptest/archive/master.zip
+unzip master.zip
+./configure -prefix=/home/lsi/slow
+make
+make install
+
+q)apps.db.ripe.net
+www.nic.es
+ip6.nl
+
+dnsnum udc.es
+dnsrecon -r 193.144.48.1.193.144.48.254
+
+whatweb ww.usc.es
+
+r)av

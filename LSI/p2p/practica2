@@ -1,0 +1,62 @@
+q)
+apt-get install logcheck
+
+editar /etc/logcheck/logcheck.conf
+
+REPORTLEVEL="server" 	(server,workstacion o paranoid)
+SENDMAILTO="lsi"     	(direccion para reportes)
+#ATTACKSUBJECT="Security Alerts"
+#SECURITYSUBJECT="Security Events"
+#EVENTSUBJECT="System Events"
+
+etc/logcheck/logcheck.file
+				/var/log/syslog
+				/var/log/auth.log
+
+cracking.d
+cracjing.ignore.d
+violations.d
+violations.ignore.d
+
+
+en /usr/bin
+sudo -u logcheck ./logcheck
+
+r)
+medusa -h x.x.x.x(compañero) -u lsi -P p.txt -M ssh -f
+
+fail2ban instalado
+etc/init.d/fail2ban
+etc/fail2ban/action.d    y filter.d(directorios), fail2ban.conf, jail.conf
+
+s)
+OSSEC ->
+wget https://github.com/ossec/ossec-hids/archive/2.9.1.tar.gz
+tar -xzvf ossec-hids-*.tar.gz
+cd ossec-hids.*
+./install.sh
+
+es		idioma
+local		tipo install
+/var/ossec	donde install
+s		recibir notif
+lsi@localhost	direccion
+localhost	servidor email
+s		servidor integridad
+s		deteccion rootkits
+s		respuesta activa
+s		desechar en el firewall
+
+
+systemctl start ossec.service
+
+
+
+apt-get install php5 apach2 php5-cgi
+		libapache2-mod-php5
+wget ossec.net/files/ossec-wui-0.3.tar.gz
+tar
+mv ossec-wui-0.3 /var/www/ossec-wui
+cd /var/www/ossex-wui
+./setup.sh
+username: lsi

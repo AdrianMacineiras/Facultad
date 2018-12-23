@@ -1,0 +1,257 @@
+a) auto lo eth0 eth1: levantar interfaces especificas
+   			       	-lo: loobpack, conexiones internas
+				-eth0: interfaz se entra a la maquina desde el exterior
+				-eth1: interfaz no conectada al exterior
+   iface lo inet loopback:
+	-iface -> interfaz
+	-lo-> nombre interfaz
+	-inet -> configurar interfaz para ipv4
+	-loopback -> se debe cargar la configuracion de loopback
+
+   Configurar ETH0:
+	-addres: direcciopn ip de la maquina
+	-netmask: mascara de subred
+	-braodcast: direccion broadcast
+	-network: red en la que se trabaja
+	-gateway: puerto de salida
+
+   Configurar ETH1:
+	Igual que eth0 pero cambiar IP y no gateway -> red interna
+
+
+   Fichero hosts: /etc/hosts -> guarda correspondencia entre dominios de inernet e IP's.
+    			        se escribe primero la IP y luego el dominio -> 127.0.0.1 localhost -> al escribir localhost el       		                        fichero busca si tiene esa IP si no pregunta al distribuidor de internet.
+
+   Fichero resolv.conf: /etc/resolv.conf -> fichero para resolver dns, resolver correctamente los nombres de servidores en internet.
+				 	    En este caso el unico servidor de nombre a consultar es la maquina local.
+					    Nombre dominio->nombre de host
+					    Ruta de busqueda -> nombre del dominio
+
+   Fichero nsswitch.conf: /etc/nsswitch.conf -> configuracion de las BD's del sistema y conmutacion de servicios de nombres.
+					        provee una interfaz para configurar y acceder a diferentes bases de 							datos de cuentas de usuarios y claves como la de contraseñas, grupo y hosts.
+					     
+   Fichero sources.list: /etc/apt/sources.list -> repositorios disponibles de los paquetes software.
+(************************************************************************************************************************************)
+b) Distro original Debian 8
+   Actualizada a Debian GNU/Linux 9 (stretch)
+   
+   Pasos para actualizar:
+	- apt-get update
+	- apt-get upgrade
+	- Modificar el fichero sources.list, cambiar jessie por stretch para descargar la nueva distro.
+	- apt-get update
+	- apt-get upgrade
+	- apt-get dist-upgrade
+	(*Tras actualizar volver a utilizar update y upgrade para asegurar que no hay mas que actualizar*)
+(************************************************************************************************************************************)
+c) Secuencia de arranque:
+	1) Codigo de la BIOS: inicializacion basica del hardware, y cede el control del sistema al siguiente paso.
+	2) Codigo de secuencia de arranque: Debian situa el codigo de la secuencia de carga del GRUB(Grand Unified Bootloader) en el 		   MBR(Master Boot Record).  
+	3) Ejecucion del programa de /init en el initramfs: se ejecuta el /init en el initramfs como un script de shell que 	  		   inicializa el kernel y cede el control a /sbin/init en el HD.
+	4) Ejecucion de /sbin/init bajo el kernel: init inicializa el archivo de configuracion del sistema en /etc/inittab.
+(************************************************************************************************************************************)
+d) systemd-analyze time -> Tiempo aproximado de botado del kernel y userspace.
+	Startup finished in 3.881s (kernel) + 13.265s (userspace) = 17.146s
+   systemd-analyze blame -> relacion de los tiempos de ejecucion de los servicios del sistema.
+(************************************************************************************************************************************)
+e)systemctl list-units  -> lista de servicios
+  systemctl --failed  -> lista de servicios fallidos
+  Journald:
+	journalctl > mensajes.log -> meter toda la informacion dada por el comando journalctl en un fichero .log.
+	journalctl -f -> mensajes en tiempo real.
+	journalctl --list-boots -> filtrar la lista de todos los boots
+	journalctl -b -X -> X id del botado, filtra los mensajes por botado
+	journalctl -k -> mensajes de kernel
+	journalctl -k -b -> mensajes del kernel durante el botado actual
+	journalctl -n (X)-> muestra los 10 ultimos mensajes si añades un numero (X) muestra esa cantidad de mensajes
+	journalctl /usr/sbin/NetworkManager -> filtrado por programas o ejecutables especificando ruta
+	systemctl list-units -t service --all -> servicios que dependen de systemd
+	journalctl -u dbus.service-> un servicio en concreto
+
+  systemd-timesyncd -> usr/lib/systemd/systemd-timesyncd
+	Sirve para sincronizar el reloj del sistema con el de un servidor de protocolo de tiempo de red remoto.
+
+  systemd-cgls -> Muestra de forma recursiva la jerarquia de los contenidos del grupo de control de Linux en forma de arbol.
+(************************************************************************************************************************************)
+f) ifconfig -a -> ver info
+   ifconfig eth1 down/up -> deshabilitar/habilitar interfaz de red
+   ifconfig eth1 "dirIP" -> cambiar IP
+   ifconfig eth1 netmask "dirMASK" -> cambiar mascara
+   ifconfig eth1 broadcast "dirBroad" -> cambiar broadcast
+   ifconfig eth1 mthu "XXXX" -> cambiar MTU(unidad maxima de transmision)
+(************************************************************************************************************************************)
+g) ip route show -> mostrar las rutas del sistema
+   netstat -r -> tabla de rutas
+   
+   ip route add 10.10.151.0 via 10.10.150.251 dev eth1
+(************************************************************************************************************************************)
+h) lsof -i -> ver servicios
+   systemctl list-unit-files --type service --all -> listado de servicios y ver si estan habilitados o deshabilitados
+   systemctl list-units type service --all -> listado de todos los servicios y si estan activos o no
+   systemctl list-units service -> listado de servicios activos
+   systemctl list-unit-files --state=failed -> listado de servicios que fallaron en el momento de botado
+ 
+   Disabled services: bluetooth
+		      atd
+		      ModemManager
+		      exim4
+		      minissdpd
+ 		      rpcbind
+  QUITAR: NetworkManager-wait-online.service
+	  pppd-dns.service
+	  ssa.service
+          systemd-timesyncd.service
+	  rtkit-daemon.service
+(************************************************************************************************************************************)
+i)/etc/systemd/system/disk-space-check.service
+  [Unit]
+  Description = Proporciona el espacio del escritorio /home/
+  After = network.target
+
+  [Service]
+  ExecStart = /usr/local/bin/disk-space-check.sh
+
+  [Install]
+  WantedBy = default.target
+
+  After -> cuando se ejecuta el Script
+  ExecStart -> path para ser ejecutado
+  WantedBy -> target que tiene que estar instalado
+
+  /usr/local/bin/disk-space-check.sh
+  #!/bin/bash
+  date > /root/disk_space_report.txt
+  du -sh /home/ >> /root/disk_space_report.txt
+
+  - Hacer disk-space-check.sh ejecutable -> chmod 744
+  - Instalar el systemd.service -> chmod 644 disk-space-check.service || systemctl daemon-reload || 					   systemctl enable disk-space-check.service
+  - Probar antes de reiniciar -> sytemctl start disk-space-check.service || cat /root/disk_space_report.txt
+(************************************************************************************************************************************)
+j)netstat
+
+  ACTIVE INTERNET CONNECTIONS
+  Proto -> protocolo usado por el socket
+  Recv-Q -> Cantidad de bytes no copiados por el programa conectado a este socket
+  Send-Q -> Cantidad de bytes no reconocidos por el host remoto
+  Local Address -> Direccion y puerto del socket local
+  Foreing Address -> Direccion y puerto del socket remoto
+  State -> estado del sockec
+  
+  ACTIVE UNIX DOMAIN SOCKETS
+  Proto -> protocolo usado por el socket
+  RefCnt -> Cuenta de referencia (cantidad de procesos enganchados a este socket)
+  Type -> tipos de acceso al socket
+(************************************************************************************************************************************)
+k) top -> monitorizar los procesos en tiempo real
+   netstat -c --continuous -> monitorizar las conexiones
+(************************************************************************************************************************************)
+l) nano /etc/hosts.allow
+
+  #Esta maquina
+   sshd : 127.0.0.1
+   sshd : 10.10.102.102
+   :spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+   sshd : 10.10.150.102
+   :spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+  #eduroam
+   sshd : 10.20.
+   :spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+  #vpn
+   sshd : 10.30.
+   :spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+  #Compañero
+   10.10.102.109
+   :spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+   10.10.150.109
+   :spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+  nano /etc/hosts.deny
+
+  ALL:ALL
+
+  Primero pasa por firewall y luego por el Wrapper
+(************************************************************************************************************************************)
+m) /etc/network/interfaces
+   
+   auto lo eth0 eth1 tun6to4
+   iface tun6to4 inet6 v4tunnel
+   address 2002:a0a:6666::1
+   netmask 16
+   endpoint any
+   local 10.10.102.102
+
+   /etc/hosts.allow
+   #Local ipv6
+   sshd : [::1] : spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+   #Propia ipv6
+   sshd : [2002:a0a:6666::1] : spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+   #Compañero ipv6
+   sshd : [2002:a0a:666d::1] : spawn /bin/echo "Desde %a service %d" >> /home/lsi/sshconnect.txt
+
+   probar ipv6 -> ping6 2002:a0a:6666::1
+(************************************************************************************************************************************)
+n) Servidor-Cliente NTP
+   
+   editar archivo /etc/ntp.conf
+   #Servidor
+   #server 127.127.1.0
+   #fudge 127.127.1.0 stratum 10
+   Resto de servidores comentados
+
+   #Cliente
+   server 10.10.150.109
+   
+   #Como servidor
+   #restrict 127.127.1.0 mask 255.255.255.255 noserve nomodify
+   
+   #Como cliente
+   restrict 10.10.150.109 mask 255.255.255.255 noquery nopeer
+
+   Una vez editado -> systemctl restart ntp.service
+   Servidor se inicia primero
+   Cliente utiliza -> ntpdate -d 10.10.150.109; para sincronizar su reloj con el del servidor
+   ntpq -p :
+	-remote: el servidor remoto con el que esta sincronizado.
+	-refid: donde el servidor remoto esta sincronizado.
+	-st(stratum): stratum del servidor remoto.
+	-t(type): tipo (u:cliente unicast o manycast, b: cliente broadcast o multicast, l: referencia al reloj local, s:peer 			  simetrico, A: servidor manycast, B: servidor broadcast, M: servidor multicast)
+	-when: ultima vez que se sondeó.
+	-poll: frecuencia de sondeo.
+	-reach: registra si el sondeo ha sido un exito o un fallo.
+	-delay: retraso de comunicacion entre cliente y servidor.
+	-offset: indica la diferencia de tiempo, en milisegundos, entre el cliente y el servidor.
+	-jitter: indica la variabilidad de la latencia en la red.
+(************************************************************************************************************************************)
+o) Como servidor comentar todo y añadir la siguiente linea ->:fromhost-ip,isequal,"10.10.150.109" /var/log/10.10.150.109
+   El cliente envia -> logger -p mail.err "Prueba X"
+   El servidor deberia tener una entrada con el mensaje Prueba X en el fichero /var/log/syslog.
+   Se para el servidor con systemctl stop rsyslog.service el cliente manda varios mensajes y se vuelve a iniciar el servidor con systemctl start rsyslog.service y el servidor tiene entradas con los mensajes enviados por el cliente
+ #provides UDP syslog reception
+   #module(load="imudp")
+   #UDPServerRun 514
+   #input(type="imudp" port="514")
+
+   # provides TCP syslog reception
+   module(load="imtcp")
+   InputTCPServerRun 514
+   #:fromhost-ip,isequal, "127.0.0.1"~
+   #template logremoto, "/var/log/remote/%fromhost-ip%.syslog.log"
+   #*.*?logremoto
+   input(type="imtcp" port="514")
+   :fromhost-ip,isequal,"10.10.150.109" /var/log/10.10.150.109
+(************************************************************************************************************************************)
+p) El protocolo NTP es vulnerable a ataques de DDoS o a spoofing y si atacan a lo servidores syslog es facil obtener información importante.
+   El ataque a de DDoS básicamente es mandar una gran cantidad de trafico de paquetes UDP al servidor anulando prácticamente cualquier tipo de comunicación con el servidor permitiendo asi al atacante recibir informacion de todos aquellos clientes que realizaron peticiones a este servidor y pudiendo asi obtener sus IP's.
+Esto sucede por que NTP no tiene ninguna forma de protegerse ya que no utiliza firewalls.
+Tambien resulta que no tiene nada que restrinja quien accede al servidor y pueda escribir en el o almacenar los logs.
+
+Dicho esto prosibles soluciones podrian ser un firewall y rechazar aquellas conexiones que no vengan de una red autorizada.
+Más soluciones para reducir los daños en caso de ataque es cambiar el protocolo de los paquetes, en vez de utilizar UDP usar TCP.
+(************************************************************************************************************************************)
+ 
+

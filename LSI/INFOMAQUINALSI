@@ -1,0 +1,123 @@
+maquina->2.1.5
+ip -> 102
+Password lsi-> Y1
+Password root -> M1
+Puertos entrada -> 5
+Puertos salida -> 80, 445, 21
+Servidor dns -> 10.10.102.27
+Segunda red -> 10.10.150.102
+
+/etc/apt/sources.list -> debian 9
+			table y security las demas comentar
+
+/etc/default/grub
+
+Arranque
+bios->cmos->grub
+
+systemd -> scripts de inicio
+
+default-target -> OBjetivo del systemd de todo lo que tiene que ejecutar. servicios en paralelo, dependencias.
+
+graphical-target -> target real en vez de default
+
+systemctl --all
+
+journalctl -b
+
+ifconfig -a
+ifconfig eth1 down
+ifconfig eth1 mtu 1200
+ifconfig eth1 x.x.x.x netmask x.x.x.x ->cambiar mascara de red
+ifconfig eth1:0 10.10.150.253 netmask x.x.x.x ->segundo interfaz
+
+netstat -nr -> dar de alta una ruta
+route add _____->10.10.151.0   || 10.10.10.150.251
+netstat -neta
+	-a
+	-metac
+
+
+lsof -ni ->netstat + info || id servicio red
+ss -tpln
+ss -tpan 'sport = :22'
+
+ip a->infconfig -a
+ip addr show eth0->info de eth0
+ip route add _____ ->
+
+systemd -cgtop || top
+
+ETC/HOSTS.ALLOW --> sshd 127.0.0.1, 10.10.102.X, 10.10.150.X (x->compañero)
+		--> red eduroam ->10.10.3.
+		--> vpn
+spawn o twist /bin/echo "Desde %a __ %d" >> /home/lsi/sshconnect
+
+
+df -k (*Limpiar hd*)
+
+/etc/netmask/interfaces
+
+*algo* lo eth0 eth1 tun6to4
+
+iface tun6to4 inet v4tunnel
+address *mi direccion*
+netmask 16
+endpoint any
+local 10.10.102.X
+
+descargar thc-ipv6
+
+
+servidor tiempos -cliente tiempos
+
+servidor sincroniza reloj con reloj sistema, cliente sincroniza con servidor
+
+systemd-timesyncd ->sincroniza tiempo
+
+servidor de tiempos: ntp.conf(apt-get install ntp) -> comentar server/pull 
+				server 127.127.1.1
+				fudge 127.127.1.1 stratum 10
+				linea de restricts:
+				restrict ipcliente 255.255.255.255 noquery nopeer
+
+systemctl restar ntp.service
+
+cliente de tiempos
+en servidor ip del compañero
+	repetir las mismas lineas que servidor
+
+probar que funcione
+ntpq -pn
+
+
+revertir->servidor -cliente log
+
+cliente de logs:
+/etc/rsyslog.conf  ->	WorkDirectory
+			ActionQueueType 		LinkedList
+			ActionQueueFileName		ficherito
+			ActionQueueSaveInShutdown	on
+			ActionResumeRetryCount		-1			
+			*.* @@ipservidorlogs
+
+systemctl restart rsyslog.ctl
+
+servidor de logs:
+comentar intcp y TCPServerRun 514
+
+:fromhost-ip,isequal,"ipcliente" /var/log/ipcliente
+& ~
+
+systemctl restar rsyslog.service
+
+prueba:
+logger -p mail.en "Prueba 1"
+
+Parar servidor de log ->systemctl stop rsyslog.service
+logger -p mail.en "prueba 2-3-4-5"
+
+se levanta y se generan los logs
+
+
+estudio de fallos de seguridad(fuente,destino y flujo)
