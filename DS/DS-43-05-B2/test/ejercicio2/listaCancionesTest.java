@@ -1,0 +1,349 @@
+package ejercicio2;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class listaCancionesTest {
+    
+   
+   @Test
+   public void testAñadirPosSimple(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;
+       expResult.add(tema1);
+       expResult.add(tema2);
+       result = reproductor.devolverlista();
+       assertEquals(expResult,result);       
+   }
+   
+   @Test
+   public void testAñadirPos(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;
+       expResult.add(tema3);
+       expResult.add(tema1);
+       expResult.add(tema4);
+       expResult.add(tema2);
+       result = reproductor.devolverlista();
+       assertEquals(expResult,result);
+   }
+   
+   @Test (expected = Exception.class)
+   public void testAñadirPosException1(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,14);
+   }
+   
+   @Test (expected = Exception.class)
+   public void testAñadirPosException2(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,-1);
+   }
+   
+   @Test
+   public void testBorrarCancion(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       reproductor.borrarCancion(3);
+       reproductor.borrarCancion(0);
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;      
+       expResult.add(tema1);
+       expResult.add(tema4);
+       result = reproductor.devolverlista();
+       assertEquals(expResult,result);
+   }
+   
+   @Test (expected = Exception.class)
+   public void testBorrarCancionException1(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.borrarCancion(3);
+   }
+   @Test (expected = Exception.class)
+   public void testBorrarCancionException2(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.borrarCancion(-10);
+   }
+   
+   @Test
+   public void testMoverCancion(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       reproductor.moverCancion(0, 2);
+       reproductor.moverCancion(0, 1);
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;
+       expResult.add(tema4);
+       expResult.add(tema1);
+       expResult.add(tema3);
+       expResult.add(tema2);
+       result = reproductor.devolverlista();
+       assertEquals(expResult,result);
+   }
+   
+   @Test (expected = Exception.class)
+   public void testMoverCancionExcepcion1(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       reproductor.moverCancion(0, 43);
+   }
+   
+    @Test (expected = Exception.class)
+    public void testMoverCancionExcepcion2(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       reproductor.moverCancion(-1, 2);
+   }
+   @Test
+   public void testMoverPuntero(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       reproductor.moverPuntero(3);
+       int expResult = 3;
+       int result = reproductor.obtenerPuntero();
+       assertEquals(expResult,result);
+   }
+   
+    @Test (expected = Exception.class)
+   public void testMoverPunteroExcepcion1(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1,0);
+       reproductor.añadirCancion(tema2,1);
+       reproductor.añadirCancion(tema3,0);
+       reproductor.añadirCancion(tema4,2);
+       reproductor.moverPuntero(6);
+   }
+   
+   @Test
+   public void testReproducirCancion(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion temaResult;
+       estadoCancion expResult = estadoCancion.SONANDO;
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       temaResult = reproductor.reproducirCancion();
+       estadoCancion result = reproductor.estaReproduciendo();
+       assertEquals(tema1,temaResult);
+       assertEquals(expResult,result);      
+   }
+   
+   @Test
+   public void testSiguienteCancion(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion temaResult;
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       temaResult = reproductor.siguienteCancion();
+       assertEquals(tema2,temaResult);      
+   }
+   @Test
+   public void testSiguienteCancion2(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion temaResult;
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       reproductor.moverPuntero(2);
+       temaResult = reproductor.siguienteCancion();
+       assertEquals(tema1,temaResult);      
+   }
+    @Test
+   public void testCancionAnterior(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion temaResult;
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       temaResult = reproductor.anteriorCancion();
+       assertEquals(tema3,temaResult);      
+   }
+   @Test
+   public void testCancionAnterior2(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion temaResult;
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       reproductor.moverPuntero(2);
+       temaResult = reproductor.anteriorCancion();
+       assertEquals(tema2,temaResult);      
+   }
+   
+   @Test
+   public void testDetenerReproduccion(){
+        Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+        listaCanciones reproductor = new listaCanciones();
+        estadoCancion expResult = estadoCancion.DETENIDO;
+        reproductor.añadirCancion(tema1);
+        reproductor.reproducirCancion();
+        reproductor.detenerReproduccion();
+        estadoCancion result = reproductor.estaReproduciendo();
+        assertEquals(expResult,result);
+   }
+   
+   @Test
+   public void testToString(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       listaCanciones reproductor = new listaCanciones();       
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       String result = reproductor.toString();
+       String expResult = "listaCanciones{canciones=[Smells like teen spi - Nirvana - Nevermind, Go with the Flow - Queens of the Stone  - Songs for the Deaf]}";
+       assertEquals (expResult,result);
+   }
+   
+   @Test
+   public void testOrdenaLista(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       Cancion tema5 = new Cancion("Smells like teen spirit","Nirvana","Nirvana","Grunge");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       reproductor.añadirCancion(tema4);
+       reproductor.añadirCancion(tema5);
+       reproductor.ordenaLista();
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;
+       expResult.add(tema2);
+       expResult.add(tema3);
+       expResult.add(tema4);
+       expResult.add(tema1);
+       expResult.add(tema5);
+       result = reproductor.devolverlista();
+       assertEquals (expResult,result);    
+   }
+   
+   @Test
+   public void testOrdenaListaComp1(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       Cancion tema5 = new Cancion ("Blue Orchid","The White Stripes","Get Behind Me Satan","Garage Rock");
+       Cancion tema6 = new Cancion ("The Hardest Button to Button","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       reproductor.añadirCancion(tema4);
+       reproductor.añadirCancion(tema5);
+       reproductor.añadirCancion(tema6);
+       Comparator comp1 = new Compara1();
+       reproductor.ordenaLista(comp1);
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;
+       expResult.add(tema3);
+       expResult.add(tema1);
+       expResult.add(tema2);
+       expResult.add(tema4);
+       expResult.add(tema6);
+       expResult.add(tema5);
+       result = reproductor.devolverlista();
+       assertEquals (expResult,result);    
+   }
+   
+   @Test
+   public void testOrdenaListaComp2(){
+       Cancion tema1 = new Cancion("Smells like teen spirit","Nirvana","Nevermind","Grunge");
+       Cancion tema5 = new Cancion("Come as you are","Nirvana","Nevermind","Grunge");
+       Cancion tema2 = new Cancion("Go with the Flow","Queens of the Stone Age","Songs for the Deaf","Rock Alternativo");
+       Cancion tema3 = new Cancion("La vida sigue igual","Julio Iglesias","Yo canto","Pop");
+       Cancion tema4 = new Cancion ("Seven Nation Army","The White Stripes","Elephant","Garage Rock");
+       listaCanciones reproductor = new listaCanciones();
+       reproductor.añadirCancion(tema1);
+       reproductor.añadirCancion(tema2);
+       reproductor.añadirCancion(tema3);
+       reproductor.añadirCancion(tema4);
+       reproductor.añadirCancion(tema5);
+       Comparator comp2 = new Compara2();
+       reproductor.ordenaLista(comp2);
+       ArrayList<Cancion> expResult = new ArrayList<>();
+       ArrayList<Cancion> result;
+       expResult.add(tema4);
+       expResult.add(tema5);
+       expResult.add(tema1);       
+       expResult.add(tema3);
+       expResult.add(tema2);
+       result = reproductor.devolverlista();
+       assertEquals (expResult,result);    
+   }
+}

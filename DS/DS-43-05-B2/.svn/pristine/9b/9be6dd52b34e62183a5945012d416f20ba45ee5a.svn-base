@@ -1,0 +1,37 @@
+package ejercicio1;
+
+public class Profesor extends PDI {
+    private int sexenio;
+    
+    //Sexenio 
+    public Profesor(String nombre, String dni, String edad) {
+        super(nombre, dni, edad);
+        this.nomina = 37*8*4;
+        this.sexenio = 0;
+    }
+
+    public int getSexenio() {
+        return sexenio;
+    }
+    
+    public void concederSexenio(){
+        if (sexenio<6) sexenio++;
+    }
+    
+    @Override
+    public double devolverNomina() {
+        return nomina + (100*sexenio);
+    }
+
+    @Override
+    public String imprimirNomina() {
+         String aux;
+        if(sexenio > 0){
+            aux = this.nombre + "(Profesor con " + sexenio + " sexenios) : "+  devolverNomina() + " euros";
+        }else {
+            aux = this.nombre + "(Profesor) : "+  devolverNomina() + " euros";
+        }
+        return aux;
+    }
+    
+}

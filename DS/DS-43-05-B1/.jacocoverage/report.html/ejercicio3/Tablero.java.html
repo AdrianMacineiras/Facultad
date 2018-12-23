@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Tablero.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;DS-43-05-B1&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">ejercicio3</a> &gt; <span class="el_source">Tablero.java</span></div><h1>Tablero.java</h1><pre class="source lang-java linenums">package ejercicio3;
+ 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+ 
+public class Tablero {
+     
+<span class="fc" id="L9">    private Posicion posiciones_tab[][] = new Posicion[8][8];</span>
+<span class="fc" id="L10">    private Pieza piezas[][] = new Pieza[2][16];</span>
+             
+<span class="fc" id="L12">    public Tablero () { </span>
+<span class="fc" id="L13">        crearTablero();</span>
+<span class="fc" id="L14">        crearPiezas();</span>
+<span class="fc" id="L15">        piezasInicio();</span>
+<span class="fc" id="L16">    }</span>
+ 
+    public void iniciarPartida () { 
+<span class="fc" id="L19">        eliminarPiezasTablero();</span>
+<span class="fc" id="L20">        piezasInicio();</span>
+<span class="fc" id="L21">    }</span>
+ 
+    @Override
+    public String toString () { 
+<span class="fc" id="L25">        StringBuilder Fern = new StringBuilder();</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        for (int i=7; i&gt;=0; i--){</span>
+<span class="fc" id="L27">            Fern.append(imprimirFila(i));</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">            if (!(i==0)) Fern.append (&quot;/&quot;);</span>
+        }
+<span class="fc" id="L30">        return Fern.toString();</span>
+    }
+ 
+    public List buscaPiezas ( PiezasTipo pieza ) { 
+<span class="fc" id="L34">        List Lista = new ArrayList();</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        for (int i=1; i&gt;=0;i--)</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            for (int j=0;j&lt;=15;j++)</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                if(piezas[i][j].getTipo()==pieza) /*&amp;&amp; !(piezas[i][j].getPos()==null))*/</span>
+<span class="fc" id="L38">                    Lista.add(piezas[i][j].getPos());</span>
+<span class="fc" id="L39">        return Lista;</span>
+    }
+ 
+    public void mover ( Posicion origen , Posicion destino ) {
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (posicionErronea(origen,destino)) throw new IllegalArgumentException();</span>
+             
+        int columna_origen,fila_origen;
+        int columna_destino,fila_destino;
+        Pieza temporal;
+<span class="fc" id="L48">        columna_origen = origen.getColumna()-97;</span>
+<span class="fc" id="L49">        fila_origen = (int) origen.getFila()-49;</span>
+<span class="fc" id="L50">        columna_destino = destino.getColumna()-97;</span>
+<span class="fc" id="L51">        fila_destino = (int) destino.getFila()-49;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (posiciones_tab[columna_destino][fila_destino].getPieza()!=null){</span>
+<span class="nc" id="L53">            temporal = posiciones_tab[columna_destino][fila_destino].getPieza();</span>
+<span class="nc" id="L54">            temporal.setPos(null);</span>
+        }
+<span class="fc" id="L56">        temporal = posiciones_tab[columna_origen][fila_origen].getPieza();</span>
+<span class="fc" id="L57">        posiciones_tab[columna_origen][fila_origen].setPieza(null);</span>
+<span class="fc" id="L58">        posiciones_tab[columna_destino][fila_destino].setPieza(temporal);</span>
+<span class="fc" id="L59">        temporal.setPos(destino);</span>
+<span class="fc" id="L60">    }</span>
+     
+    private boolean posicionErronea(Posicion origen,Posicion destino){
+        int columna,fila;
+<span class="fc" id="L64">        fila = origen.getFila()-49;</span>
+<span class="fc" id="L65">        columna = (int) origen.getColumna()-97;</span>
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">        if ((columna&gt;7) || (columna&lt;0))return true;</span>
+<span class="pc bpc" id="L67" title="2 of 4 branches missed.">        if ((fila&gt;7) || (fila&lt;0))return true;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (posiciones_tab[columna][fila].getPieza()==null) return true;</span>
+<span class="fc" id="L69">        fila = destino.getFila()-49;</span>
+<span class="fc" id="L70">        columna = (int) destino.getColumna()-97;</span>
+<span class="pc bpc" id="L71" title="2 of 4 branches missed.">        if ((columna&gt;7) || (columna&lt;0))return true;</span>
+<span class="pc bpc" id="L72" title="2 of 4 branches missed.">        if ((fila&gt;7) || (fila&lt;0))return true;</span>
+<span class="fc" id="L73">        return false;</span>
+    }
+     
+    private void crearTablero (){
+<span class="fc" id="L77">        int f = 0;</span>
+<span class="fc" id="L78">        int c = 0;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for(char j='1'; j&lt;='8';j++){</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            for(char i='a'; i&lt;='h';i++){</span>
+<span class="fc" id="L81">                posiciones_tab[c][f] = new Posicion (i,j);</span>
+<span class="fc" id="L82">                c++;</span>
+            }
+<span class="fc" id="L84">            c = 0;</span>
+<span class="fc" id="L85">            f++;</span>
+        }    
+<span class="fc" id="L87">    }</span>
+     
+    private void crearPiezas(){
+<span class="fc" id="L90">        int i = 0;</span>
+<span class="fc" id="L91">        int matriz_piezas = 0;//0 Rey, 1 Dama, 2-3 Alfil, 4-5 Caballo, 6-7 Torre, 8..15 Peon</span>
+<span class="fc" id="L92">        int matriz_color = 0; //0 Blanco, 1 Negro</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (PiezasColor color : PiezasColor.values()){            </span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            for (PiezasTipo tipo : PiezasTipo.values()){</span>
+<span class="fc bfc" id="L95" title="All 6 branches covered.">                if ((tipo==PiezasTipo.CABALLO) || (tipo == PiezasTipo.TORRE) || (PiezasTipo.ALFIL == tipo)){</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                    for (i=0;i&lt;=1; i++){</span>
+<span class="fc" id="L97">                        piezas[matriz_color][matriz_piezas] = new Pieza(tipo,color);</span>
+<span class="fc" id="L98">                        matriz_piezas++;</span>
+                    }                        
+                }    
+<span class="fc bfc" id="L101" title="All 2 branches covered.">                else if (tipo==PiezasTipo.PEON){</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                    for(i=0;i&lt;=7;i++){</span>
+<span class="fc" id="L103">                        piezas[matriz_color][matriz_piezas] = new Pieza(tipo,color);</span>
+<span class="fc" id="L104">                        matriz_piezas++;</span>
+                    }
+                }
+                    else {
+<span class="fc" id="L108">                        piezas[matriz_color][matriz_piezas] = new Pieza(tipo,color);</span>
+<span class="fc" id="L109">                        matriz_piezas++;</span>
+                    }            
+            }
+<span class="fc" id="L112">            matriz_color++;</span>
+<span class="fc" id="L113">            matriz_piezas = 0;</span>
+        }
+<span class="fc" id="L115">    }</span>
+     
+    private void piezasInicio(){
+    //Piezas Blancas    
+        int j1;
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        for (int j = 0; j&lt;=1;j++){</span>
+<span class="fc" id="L121">            j1 = j;</span>
+<span class="fc" id="L122">            j1 = j * 7;</span>
+        //Rey Blanco | Negro        
+<span class="fc" id="L124">            posiciones_tab[4][j1].setPieza(piezas[j][0]);</span>
+<span class="fc" id="L125">            piezas[j][0].setPos(posiciones_tab[4][j1]);</span>
+        //Dama Blanca | Negra 
+<span class="fc" id="L127">            posiciones_tab[3][j1].setPieza(piezas[j][1]);</span>
+<span class="fc" id="L128">            piezas[j][1].setPos(posiciones_tab[3][j1]);</span>
+        //Alfiles Blancos | Negros
+<span class="fc" id="L130">            posiciones_tab[2][j1].setPieza(piezas[j][2]);</span>
+<span class="fc" id="L131">            piezas[j][2].setPos(posiciones_tab[2][j1]);</span>
+<span class="fc" id="L132">            posiciones_tab[5][j1].setPieza(piezas[j][3]);</span>
+<span class="fc" id="L133">            piezas[j][3].setPos(posiciones_tab[5][j1]);</span>
+        //Caballos Blancos | Negros
+<span class="fc" id="L135">            posiciones_tab[1][j1].setPieza(piezas[j][4]);</span>
+<span class="fc" id="L136">            piezas[j][4].setPos(posiciones_tab[1][j1]);</span>
+<span class="fc" id="L137">            posiciones_tab[6][j1].setPieza(piezas[j][5]);</span>
+<span class="fc" id="L138">            piezas[j][5].setPos(posiciones_tab[6][j1]);</span>
+        //Torres Blancas | Negros
+<span class="fc" id="L140">            posiciones_tab[0][j1].setPieza(piezas[j][6]);</span>
+<span class="fc" id="L141">            piezas[j][6].setPos(posiciones_tab[0][j1]);</span>
+<span class="fc" id="L142">            posiciones_tab[7][j1].setPieza(piezas[j][7]);</span>
+<span class="fc" id="L143">            piezas[j][7].setPos(posiciones_tab[7][j1]);</span>
+        //Peones Blancos | Negros
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            if (j == 0) j1=1;</span>
+<span class="fc" id="L146">            else j1=6;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            for(int i = 0; i&lt;=7; i++){</span>
+<span class="fc" id="L148">                posiciones_tab[i][j1].setPieza(piezas[j][i+8]);</span>
+<span class="fc" id="L149">                piezas[j][i+8].setPos(posiciones_tab[i][j1]);</span>
+            }
+        }
+<span class="fc" id="L152">    }    </span>
+     
+    private StringBuilder imprimirFila(int Fila){
+<span class="fc" id="L155">        StringBuilder Fern = new StringBuilder();</span>
+         
+<span class="fc" id="L157">        int acum = 0;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        for (int i=0;i&lt;=7;i++){</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">            if (posiciones_tab[i][Fila].getPieza()==null){</span>
+<span class="fc" id="L160">                acum++;</span>
+            }
+            else{
+<span class="fc bfc" id="L163" title="All 2 branches covered.">                if (acum&gt;0){</span>
+<span class="fc" id="L164">                    Fern.append((char) ('0' + acum));</span>
+<span class="fc" id="L165">                    acum = 0;</span>
+                }
+<span class="fc" id="L167">                Pieza temporal = posiciones_tab[i][Fila].getPieza();</span>
+<span class="fc" id="L168">                Fern.append(temporal.letraPieza());</span>
+            }
+        }
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (acum&gt;0){</span>
+<span class="fc" id="L172">            Fern.append((char) ('0' + acum));</span>
+<span class="fc" id="L173">            acum = 0;</span>
+        }
+<span class="fc" id="L175">        return Fern;</span>
+    }
+    
+     
+    private void eliminarPiezasTablero(){
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        for (int i = 0; i&lt;=7;i++){</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">            for (int j=0; j&lt;=7; j++){</span>
+<span class="fc" id="L182">                posiciones_tab[i][j].setPieza(null);</span>
+            }
+        }
+<span class="fc" id="L185">    }</span>
+     
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

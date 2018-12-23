@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Palindromo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;DS-43-05-B1&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">ejercicio1</a> &gt; <span class="el_source">Palindromo.java</span></div><h1>Palindromo.java</h1><pre class="source lang-java linenums">package ejercicio1;
+
+<span class="nc" id="L3">public  class  Palindromo {</span>
+        public static boolean esPalindromo (String texto){
+<span class="fc" id="L5">        String texto_min = texto.toLowerCase();</span>
+<span class="fc" id="L6">        int cabeza = 0;</span>
+<span class="fc" id="L7">        int cola = texto_min.length()-1;</span>
+<span class="fc bfc" id="L8" title="All 2 branches covered.">        while (cola &gt; cabeza){</span>
+<span class="fc bfc" id="L9" title="All 2 branches covered.">            if (!esCaracterValido(texto_min.charAt(cabeza))){</span>
+<span class="fc" id="L10">                cabeza++;</span>
+<span class="fc" id="L11">                continue;</span>
+            }
+<span class="fc bfc" id="L13" title="All 2 branches covered.">            while (!esCaracterValido(texto_min.charAt(cola))){//while en lugar de if + continue, para evitar </span>
+<span class="fc" id="L14">                cola--;                                    //comprobaciones innecesarias en el if anterior </span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">                if (cola==cabeza) break;</span>
+            }
+<span class="fc bfc" id="L17" title="All 2 branches covered.">            if (texto_min.charAt(cabeza)==texto_min.charAt(cola)){</span>
+<span class="fc" id="L18">                cabeza++;</span>
+<span class="fc" id="L19">                cola--;</span>
+            }
+<span class="fc" id="L21">            else return false;</span>
+        }
+<span class="fc" id="L23">        return true;</span>
+    }
+     
+    private static boolean esCaracterValido (char j){
+<span class="fc bfc" id="L27" title="All 4 branches covered.">        if ((j&lt;97) || (j&gt;122)) return false;</span>
+<span class="fc" id="L28">        else return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

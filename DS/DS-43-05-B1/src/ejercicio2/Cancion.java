@@ -1,0 +1,126 @@
+package ejercicio2;
+
+import java.util.Objects;
+
+/**
+ *
+ * @author adrian
+ */
+
+public class Cancion {
+    
+    private String title;
+    private String author;
+    private String albm;
+    private String style;
+    
+    
+    public  Cancion(String  titulo , String  autor  , String  album , String  estilo){
+        this.title  =   titulo;
+        this.author =   autor;
+        this.albm   =   album;
+        this.style  =   estilo;
+    }
+    
+//  Getters ...
+    public  String  getTitulo () { 
+        return this.title;
+    }
+    
+    public  String  getAutor () { 
+        return this.author;
+    }
+    
+    public  String  getAlbum () { 
+        return this.albm;
+    }
+    
+    public  String  getEstilo () { 
+        return this.style;
+    }
+
+/**
+* Devuelve  una  representaci ́on en  String  que  representa a la  canci ́on.
+* Se  trata  de una  concatenaci ́on de  titulo  autor y album  separados  por
+* guiones: "Titulo  - Autor  - Album ".
+* Si  cualquiera  de los  tres  campos  tiene m ́as de 20  caracteres  se  truncar ́a
+* a 20  caracteres  para  evitar  Strings  largos.
+* @return  String  representando  la  canci ́on.
+*/
+@Override
+public  String  toString () {
+    String titulo, autor ,album;
+    if(this.title.length()> 20){
+        titulo = this.title.substring(0, Math.min(this.title.length(), 20));
+    } else {
+        titulo = this.title;
+    }
+    
+    if(this.author.length()> 20){
+        autor = this.author.substring(0, Math.min(this.author.length(), 20));
+    } else {
+        autor = this.author;
+    }
+    
+    if(this.albm.length()> 20){
+        album = this.albm.substring(0, Math.min(this.albm.length(), 20));
+    } else {
+        album = this.albm;
+    }
+    return titulo + " - "+ autor +" - "+ album;
+}
+
+/**
+* Igualdad l ́ogica  entre  dos  canciones. Dos  canciones  se  considerar ́an iguales
+* si  tienen  el  mismo t ́ıtulo y el  mismo  autor. Para la  igualdad l ́ogica se
+* ignorar ́a el  ́album (ya que  una  misma  canci ́on se  puede  incluir  en  recopilatorios)
+* y el  estilo (ya que  puede  aparecer  clasificada  bajo  diferentes  estilos ).
+*
+* Para  simplificar  se  supondr ́a que  para  que  dos  canciones  sean  iguales  los
+* Strings  que  representan  al  titulo y al  autor  tienen  que  estar  escritos
+* ex ́actamente  igual (diferencias  con  may ́usculas y min ́usculas  son  relevantes ).
+*
+* @param  obj  Objeto a comparar  con el  objeto  actual.
+* @return  True si son  iguales , False  en caso  contrario
+*/
+@Override
+public  boolean  equals(Object  obj) { 
+    if(this == obj){
+        return true;
+    }
+    
+    if(obj == null){
+        return false;
+    }
+    
+    if (getClass() != obj.getClass()) {
+        return false;
+    }
+    
+    final Cancion other = (Cancion) obj;
+        if(!this.title.equals(other.title)){
+            return false;
+        }
+        
+        if(!this.author.equals(other.author)){
+            return false;
+        }
+        
+    return true;
+}
+
+/**
+* Devuelve  un c ́odigo  hash  que  representa a la  canci ́on. Recuerda  que  canciones
+* que son  iguales  deben  devolver  el  mismo  hashcode.
+* @return  Un  entero  representando  el c ́odigo  hash de la  canci ́on.
+*/
+
+@Override
+public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + this.title.hashCode();
+        hash = 53 * hash + this.author.hashCode();
+        return hash;
+    }
+    
+}

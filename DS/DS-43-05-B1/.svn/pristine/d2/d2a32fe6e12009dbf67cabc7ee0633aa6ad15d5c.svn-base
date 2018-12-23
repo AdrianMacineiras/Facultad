@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Cancion.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;DS-43-05-B1&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">ejercicio2</a> &gt; <span class="el_source">Cancion.java</span></div><h1>Cancion.java</h1><pre class="source lang-java linenums">package ejercicio2;
+
+import java.util.Objects;
+
+/**
+ *
+ * @author adrian
+ */
+
+public class Cancion {
+    
+    private String title;
+    private String author;
+    private String albm;
+    private String style;
+    
+    
+<span class="fc" id="L18">    public  Cancion(String  titulo , String  autor  , String  album , String  estilo){</span>
+<span class="fc" id="L19">        this.title  =   titulo;</span>
+<span class="fc" id="L20">        this.author =   autor;</span>
+<span class="fc" id="L21">        this.albm   =   album;</span>
+<span class="fc" id="L22">        this.style  =   estilo;</span>
+<span class="fc" id="L23">    }</span>
+    
+//  Getters ...
+    public  String  getTitulo () { 
+<span class="fc" id="L27">        return this.title;</span>
+    }
+    
+    public  String  getAutor () { 
+<span class="fc" id="L31">        return this.author;</span>
+    }
+    
+    public  String  getAlbum () { 
+<span class="fc" id="L35">        return this.albm;</span>
+    }
+    
+    public  String  getEstilo () { 
+<span class="fc" id="L39">        return this.style;</span>
+    }
+
+/**
+* Devuelve  una  representaci ́on en  String  que  representa a la  canci ́on.
+* Se  trata  de una  concatenaci ́on de  titulo  autor y album  separados  por
+* guiones: &quot;Titulo  - Autor  - Album &quot;.
+* Si  cualquiera  de los  tres  campos  tiene m ́as de 20  caracteres  se  truncar ́a
+* a 20  caracteres  para  evitar  Strings  largos.
+* @return  String  representando  la  canci ́on.
+*/
+@Override
+public  String  toString () {
+    String titulo, autor ,album;
+<span class="fc bfc" id="L53" title="All 2 branches covered.">    if(this.title.length()&gt; 20){</span>
+<span class="fc" id="L54">        titulo = this.title.substring(0, Math.min(this.title.length(), 20));</span>
+    } else {
+<span class="fc" id="L56">        titulo = this.title;</span>
+    }
+    
+<span class="fc bfc" id="L59" title="All 2 branches covered.">    if(this.author.length()&gt; 20){</span>
+<span class="fc" id="L60">        autor = this.author.substring(0, Math.min(this.author.length(), 20));</span>
+    } else {
+<span class="fc" id="L62">        autor = this.author;</span>
+    }
+    
+<span class="fc bfc" id="L65" title="All 2 branches covered.">    if(this.albm.length()&gt; 20){</span>
+<span class="fc" id="L66">        album = this.albm.substring(0, Math.min(this.albm.length(), 20));</span>
+    } else {
+<span class="fc" id="L68">        album = this.albm;</span>
+    }
+<span class="fc" id="L70">    return titulo + &quot; - &quot;+ autor +&quot; - &quot;+ album;</span>
+}
+
+/**
+* Igualdad l ́ogica  entre  dos  canciones. Dos  canciones  se  considerar ́an iguales
+* si  tienen  el  mismo t ́ıtulo y el  mismo  autor. Para la  igualdad l ́ogica se
+* ignorar ́a el  ́album (ya que  una  misma  canci ́on se  puede  incluir  en  recopilatorios)
+* y el  estilo (ya que  puede  aparecer  clasificada  bajo  diferentes  estilos ).
+*
+* Para  simplificar  se  supondr ́a que  para  que  dos  canciones  sean  iguales  los
+* Strings  que  representan  al  titulo y al  autor  tienen  que  estar  escritos
+* ex ́actamente  igual (diferencias  con  may ́usculas y min ́usculas  son  relevantes ).
+*
+* @param  obj  Objeto a comparar  con el  objeto  actual.
+* @return  True si son  iguales , False  en caso  contrario
+*/
+@Override
+public  boolean  equals(Object  obj) { 
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">    if(this == obj){</span>
+<span class="nc" id="L89">        return true;</span>
+    }
+    
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">    if(obj == null){</span>
+<span class="nc" id="L93">        return false;</span>
+    }
+    
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">    if (getClass() != obj.getClass()) {</span>
+<span class="nc" id="L97">        return false;</span>
+    }
+    
+<span class="fc" id="L100">    final Cancion other = (Cancion) obj;</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if(!this.title.equals(other.title)){</span>
+<span class="fc" id="L102">            return false;</span>
+        }
+        
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        if(!this.author.equals(other.author)){</span>
+<span class="fc" id="L106">            return false;</span>
+        }
+        
+<span class="fc" id="L109">    return true;</span>
+}
+
+/**
+* Devuelve  un c ́odigo  hash  que  representa a la  canci ́on. Recuerda  que  canciones
+* que son  iguales  deben  devolver  el  mismo  hashcode.
+* @return  Un  entero  representando  el c ́odigo  hash de la  canci ́on.
+*/
+
+@Override
+public int hashCode() {
+<span class="fc" id="L120">        int hash = 7;</span>
+<span class="fc" id="L121">        hash = 53 * hash + Objects.hashCode(this.title);</span>
+<span class="fc" id="L122">        hash = 53 * hash + Objects.hashCode(this.author);</span>
+<span class="fc" id="L123">        return hash;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

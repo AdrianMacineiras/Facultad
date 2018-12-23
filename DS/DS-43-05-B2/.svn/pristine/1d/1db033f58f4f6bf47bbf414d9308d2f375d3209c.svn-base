@@ -1,0 +1,104 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ejercicio1;
+
+import java.util.ArrayList;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author rg3
+ */
+public class UniversidadTest {
+    
+    @Test
+    public void testSexenios(){
+        Profesor Manolo = new Profesor ("Manolo","3141","41");
+        int expResult = 3;
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        int result = Manolo.getSexenio();
+        assertEquals(expResult,result);
+    }
+    
+    @Test
+    public void testExcesoSexenios(){
+        Profesor Manolo = new Profesor ("Manolo","3141","41");
+        int expResult = 6;
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        int result = Manolo.getSexenio();
+        assertEquals(expResult,result);
+    }
+    
+     @Test
+    public void testHorasExtras(){
+        Informatico Manolo = new Informatico ("Manolo","3141","41");
+        int expResult = 37;
+        Manolo.horasExtras(37);
+        int result = Manolo.getHoras_extras();
+        assertEquals(expResult,result);
+    }
+    
+     @Test
+    public void testHorasExtrasTrasImpresion(){
+        Administrativo Jose_Juan = new Administrativo ("Jose Juan","3343","81");
+        int expResult = 0;
+        Jose_Juan.horasExtras(37);
+        Jose_Juan.imprimirNomina();
+        int result = Jose_Juan.getHoras_extras();
+        assertEquals(expResult,result);
+    }
+    
+    @Test
+    public void testImprimirNominas() {
+        Universidad instance = new Universidad ();
+        Informatico Lucas = new Informatico("Lucas", "1314","45");
+        Informatico Jose_Antonio = new Informatico ("Jose Antonio", "4554", "27");
+        Profesor Manolo = new Profesor ("Manolo","3141","41");
+        Profesor Salvini = new Profesor ("Salvini","3546","39");
+        Administrativo Ronaldo = new Administrativo ("Ronaldo","6776","51");
+        Administrativo Valeron = new Administrativo ("Valeron","6778","42");
+        Investigador Maldonado = new Investigador ("Maldonado","13450","32");
+        instance.añadirPersonal(Lucas);
+        instance.añadirPersonal (Manolo);
+        instance.añadirPersonal (Ronaldo);
+        instance.añadirPersonal (Valeron);
+        instance.añadirPersonal (Maldonado);
+        instance.añadirPersonal (Salvini);
+        instance.añadirPersonal(Jose_Antonio);
+        Manolo.concederSexenio();
+        Manolo.concederSexenio();
+        Lucas.horasExtras(3);
+        Lucas.horasExtras(4);
+        Lucas.horasExtras(2);
+        Valeron.horasExtras(10);
+        String expResult = "Lucas(Informatico con 2 horas extras) : 972.0 euros"
+                + "\nManolo(Profesor con 2 sexenios) : 1384.0 euros"
+                + "\nRonaldo(Administrativo) : 1110.0 euros" 
+                + "\nValeron(Administrativo con 10 horas extras) : 1170.0 euros"
+                + "\nMaldonado(Investigador) : 980.0 euros"
+                + "\nSalvini(Profesor) : 1184.0 euros"
+                + "\nJose Antonio(Informatico) : 960.0 euros"
+                + "\nEl gasto mensual de la UDC en personal es de 7760.0 euros";       
+        String result = instance.imprimirNominas();       
+        assertEquals(expResult, result);
+    }
+    
+}

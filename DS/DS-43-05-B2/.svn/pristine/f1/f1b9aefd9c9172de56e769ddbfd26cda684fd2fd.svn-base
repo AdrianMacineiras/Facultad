@@ -1,0 +1,108 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ejercicio3;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author rg3
+ */
+public class ConcursoTest {
+    
+   
+    @Test
+    public void testConcursanteGanadorCircular() {
+        Concurso instance = new Concurso();
+        int expResult = 4;
+        int result;
+        result = instance.concursanteGanador(3, 5, instance.iteradorCircular());
+        assertEquals(expResult,result);
+    }
+
+    @Test
+    public void testConcursanteGanadorCircular2() {
+        Concurso instance = new Concurso();
+        int expResult = 1;
+        int result;
+        result = instance.concursanteGanador(4, 9, instance.iteradorCircular());
+        assertEquals(expResult,result);
+    }
+    
+    @Test
+    public void testConcursanteGanadorRebote() {
+        Concurso instance = new Concurso();
+        int expResult = 1;
+        int result;
+        result = instance.concursanteGanador(3, 5, instance.iteradorRebote());
+        assertEquals(expResult,result);
+    }
+    
+    @Test
+    public void testConcursanteGanadorRebote2() {
+        Concurso instance = new Concurso();
+        int expResult = 3;
+        int result;
+        result = instance.concursanteGanador(4, 9, instance.iteradorRebote());
+        assertEquals(expResult,result);
+    }
+    
+    @Test (expected = Exception.class)
+    public void removeReboteException(){
+        ArrayList<String> concursantes = new ArrayList<>();
+        String a = "David";
+        String b = "Elena";
+        concursantes.add(a);
+        concursantes.add(b);
+        Iterator prueba = new IteradorRebote(concursantes);
+        prueba.remove();
+    }
+    @Test (expected = Exception.class)
+    public void removeReboteException2(){
+        ArrayList<String> concursantes = new ArrayList<>();
+        String a = "Maria";
+        String b = "Jose";
+        String c = "Eva";
+        concursantes.add(a);
+        concursantes.add(b);
+        concursantes.add(c);
+        Iterator prueba = new IteradorRebote(concursantes);
+        prueba.next();
+        prueba.remove();
+        prueba.remove();
+    }
+     @Test (expected = Exception.class)
+    public void removeCircularException(){
+        ArrayList<String> concursantes = new ArrayList<>();
+        String a = "David";
+        String b = "Elena";
+        concursantes.add(a);
+        concursantes.add(b);
+        Iterator prueba = new IteradorCircular(concursantes);
+        prueba.remove();
+    }
+    @Test (expected = Exception.class)
+    public void removeCircularException2(){
+        ArrayList<String> concursantes = new ArrayList<>();
+        String a = "Maria";
+        String b = "Jose";
+        String c = "Eva";
+        concursantes.add(a);
+        concursantes.add(b);
+        concursantes.add(c);
+        Iterator prueba = new IteradorCircular(concursantes);
+        prueba.next();
+        prueba.remove();
+        prueba.remove();
+    }
+}

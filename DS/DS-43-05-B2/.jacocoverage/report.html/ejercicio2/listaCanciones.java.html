@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>listaCanciones.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;DS-43-05-B2&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">ejercicio2</a> &gt; <span class="el_source">listaCanciones.java</span></div><h1>listaCanciones.java</h1><pre class="source lang-java linenums">
+package ejercicio2;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+
+public class listaCanciones  {
+     
+<span class="fc" id="L11">    private ArrayList&lt;Cancion&gt; canciones = new ArrayList&lt;&gt;(); </span>
+    private int puntero;
+    private estadoCancion estado;
+
+<span class="fc" id="L15">    public listaCanciones() {</span>
+<span class="fc" id="L16">    this.puntero = 0;</span>
+<span class="fc" id="L17">    this.estado = estadoCancion.DETENIDO;</span>
+<span class="fc" id="L18">    }</span>
+    
+    
+    public void añadirCancion(Cancion cancion){
+<span class="fc" id="L22">        canciones.add(cancion);</span>
+<span class="fc" id="L23">    }</span>
+    
+    public void añadirCancion (Cancion cancion, int puntero){
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (puntero &gt; canciones.size()) throw new IllegalArgumentException(&quot;Posición Invalida&quot;);</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">        if (puntero &lt; 0) throw new IllegalArgumentException(&quot;Posición Invalida&quot;);</span>
+<span class="fc" id="L28">        canciones.add(puntero,cancion);</span>
+<span class="fc" id="L29">    }</span>
+    
+    public void borrarCancion (int posicion){
+<span class="fc" id="L32">        controlPosicion(posicion);</span>
+<span class="fc" id="L33">        canciones.remove(posicion);</span>
+<span class="fc" id="L34">    }</span>
+    
+    public void moverCancion (int p_origen, int p_destino){
+        Cancion cancion;
+<span class="fc" id="L38">        controlPosicion(p_origen);</span>
+<span class="fc" id="L39">        controlPosicion(p_destino);</span>
+<span class="fc" id="L40">        cancion = canciones.remove(p_origen);</span>
+<span class="fc" id="L41">        canciones.add(p_destino, cancion);</span>
+<span class="fc" id="L42">    }</span>
+    
+    public int obtenerPuntero (){
+<span class="fc" id="L45">        return puntero;</span>
+    }
+    
+    public void moverPuntero (int posicion){
+<span class="fc" id="L49">        controlPosicion(posicion);</span>
+<span class="fc" id="L50">        this.puntero = posicion;</span>
+<span class="fc" id="L51">    }</span>
+    
+    public Cancion reproducirCancion (){
+<span class="fc" id="L54">        estado = estadoCancion.SONANDO;</span>
+<span class="fc" id="L55">        return canciones.get(puntero);</span>
+    }
+    
+    public Cancion siguienteCancion (){
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (puntero==canciones.size()-1) puntero = 0;</span>
+<span class="fc" id="L60">        else puntero ++;</span>
+<span class="fc" id="L61">        return canciones.get(puntero);</span>
+    }
+    
+    public Cancion anteriorCancion (){
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (puntero==0) puntero = canciones.size()-1;</span>
+<span class="fc" id="L66">        else puntero--;</span>
+<span class="fc" id="L67">        return canciones.get(puntero);</span>
+    }
+    
+    public void detenerReproduccion (){
+<span class="fc" id="L71">        estado = estadoCancion.DETENIDO;</span>
+<span class="fc" id="L72">    }</span>
+    
+    public estadoCancion estaReproduciendo(){
+<span class="fc" id="L75">        return estado;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L80">        return &quot;listaCanciones{&quot; + &quot;canciones=&quot; + canciones + '}';</span>
+    }
+
+    public void ordenaLista(){
+<span class="fc" id="L84">        this.puntero = 0;</span>
+<span class="fc" id="L85">        this.estado = estadoCancion.DETENIDO;</span>
+<span class="fc" id="L86">        Collections.sort(canciones);</span>
+<span class="fc" id="L87">    }</span>
+    
+    public void ordenaLista(Comparator comp){
+<span class="fc" id="L90">        this.puntero = 0;</span>
+<span class="fc" id="L91">        this.estado = estadoCancion.DETENIDO;</span>
+<span class="fc" id="L92">        Collections.sort(canciones,comp);</span>
+<span class="fc" id="L93">    }</span>
+    
+    public ArrayList&lt;Cancion&gt; devolverlista(){
+<span class="fc" id="L96">        return canciones;</span>
+    }
+    
+    private void controlPosicion (int posicion){
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (posicion &gt; canciones.size()-1) throw new IllegalArgumentException(&quot;Posición Invalida&quot;);</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (posicion &lt; 0) throw new IllegalArgumentException(&quot;Posición Invalida&quot;);</span>
+<span class="fc" id="L102">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

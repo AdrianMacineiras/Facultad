@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AnalizadorCSV.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;DS-43-05-PD&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">ejercicio1</a> &gt; <span class="el_source">AnalizadorCSV.java</span></div><h1>AnalizadorCSV.java</h1><pre class="source lang-java linenums">package ejercicio1;
+
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="fc" id="L6">public class AnalizadorCSV {</span>
+<span class="fc" id="L7">     private final List&lt;Field&gt; listaCSV = new ArrayList&lt;&gt;();</span>
+     private EstrategiaCampoCSV estrategia;
+    
+    public List&lt;Field&gt; analizadorString (StringBuilder cadena){
+<span class="fc" id="L11">        int puntero = 0;</span>
+<span class="fc" id="L12">        EstrategiaCampoCSV numeros = new LeyendoNumeros();</span>
+<span class="fc" id="L13">        EstrategiaCampoCSV caracteres = new LeyendoCaracteres();</span>
+<span class="fc bfc" id="L14" title="All 2 branches covered.">        while (puntero &lt; cadena.length()){</span>
+<span class="fc bfc" id="L15" title="All 4 branches covered.">            if(cadena.charAt(puntero) == ',' || cadena.charAt(puntero) == '\n'){</span>
+<span class="fc" id="L16">                 puntero++;</span>
+<span class="fc" id="L17">                 continue;</span>
+            }
+<span class="fc bfc" id="L19" title="All 4 branches covered.">            if((int)cadena.charAt(puntero) &gt;= 48 &amp;&amp; (int)cadena.charAt(puntero) &lt;= 57 ){</span>
+<span class="fc" id="L20">                    setEstrategia(numeros);</span>
+<span class="fc" id="L21">                    puntero = analizaCSV(puntero,cadena);</span>
+<span class="fc" id="L22">                    continue;</span>
+            }
+<span class="fc bfc" id="L24" title="All 2 branches covered.">            if ((int)cadena.charAt(puntero) == 34){</span>
+<span class="fc" id="L25">                setEstrategia(caracteres);</span>
+<span class="fc" id="L26">                puntero = analizaCSV(puntero,cadena);</span>
+<span class="fc" id="L27">                continue;</span>
+            }
+<span class="fc" id="L29">            throw new IllegalArgumentException(&quot;ERROR: Carácter no entre comillas&quot;);</span>
+        }
+<span class="fc" id="L31">        return listaCSV;</span>
+    }
+         
+    @Override
+    public String toString() {
+<span class="fc" id="L36">        return &quot;AnalizadorCSV{&quot; + &quot;listaCSV= \n&quot; + listaCSV + '}';</span>
+    }
+    
+    public void añadirField (Field campo){
+<span class="fc" id="L40">        listaCSV.add(campo);</span>
+<span class="fc" id="L41">    }</span>
+    
+    public Field obtenerField(int posicion){
+<span class="fc" id="L44">        return listaCSV.get(posicion);</span>
+    }
+    
+    public void setEstrategia(EstrategiaCampoCSV estrategia){
+<span class="fc" id="L48">        this.estrategia = estrategia;</span>
+<span class="fc" id="L49">    }</span>
+    
+    public int analizaCSV(int puntero, StringBuilder cadena){
+<span class="fc" id="L52">        return estrategia.analiza(this,puntero,cadena);</span>
+    }
+     
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
